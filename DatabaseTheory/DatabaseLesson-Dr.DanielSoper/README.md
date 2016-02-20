@@ -18,7 +18,7 @@ Database Lesson Introduction
 
 
 [1]:https://github.com/LempStacker/DatabaseRelated/blob/master/DatabaseTheory/DatabaseLesson-Dr.DanielSoper/1.Getting%20Started%20with%20Databases.md
-[2]:https://github.com/LempStacker/DatabaseRelated/blob/master/DatabaseTheory/DatabaseLesson-Dr.DanielSoper/2.The%20Rational%20Model.md
+[2]:https://github.com/LempStacker/DatabaseRelated/blob/master/DatabaseTheory/DatabaseLesson-Dr.DanielSoper/2.The%20Relational%20Model.md
 [3]:https://github.com/LempStacker/DatabaseRelated/blob/master/DatabaseTheory/DatabaseLesson-Dr.DanielSoper/3.SQL:%20The%20Structured%20Query%20Language.md
 [4]:https://github.com/LempStacker/DatabaseRelated/blob/master/DatabaseTheory/DatabaseLesson-Dr.DanielSoper/4.Data%20Modeling%20and%20the%20Entity-Relationship%20(ER)%20Model.md
 [5]:https://github.com/LempStacker/DatabaseRelated/blob/master/DatabaseTheory/DatabaseLesson-Dr.DanielSoper/5.Database%20Design.md
