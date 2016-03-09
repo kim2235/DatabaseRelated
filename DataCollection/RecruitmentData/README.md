@@ -3,7 +3,7 @@
 
 僅實現個人抓取數據需求，很多步驟是手動進行的，功能很簡陋。
 
-具體使用說明，見
+具體使用說明，見本人Blog [Try to grab recruitment data from lagou](https://lempstacker.com/tw/Try-to-grab-recruitment-data-from-lagou/)
 
 
 ---
