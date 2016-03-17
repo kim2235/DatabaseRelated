@@ -7,11 +7,15 @@
 # http://www.freeproxylists.net/
 dbname='lagou'
 file='./proxyList.txt';
+sed -i '/^$/d;s@High Anonymous@HighAnonymous@g' $file
+#createTime設置屬性timestamp default current_timestamp，無需手動指定入庫時間
 
-# awk '{print $1,$2,$3,$4,$5,$8,$9,$10}' $file
+mysql -e "truncate table $dbname.proxy;"
 
 awk '{print $1,$2,$3,$4,$5,$8,$9,$10}' $file | while read line;do
-    now=`date +'%Y-%m-%d %H:%M:%S'`
+    # now=`date +'%Y-%m-%d %H:%M:%S'`
+    # now=`date +'%F %T'`
+    #存入數組
     arr=(${line})
     ipaddr=${arr[0]}
     port=${arr[1]}
@@ -21,7 +25,9 @@ awk '{print $1,$2,$3,$4,$5,$8,$9,$10}' $file | while read line;do
     region=${arr[5]}
     city=${arr[6]}
     uptime=${arr[7]}
-    mysql -e "insert into $dbname.proxy set ipaddr='$ipaddr',port='$port',protocol='$protocol',anonymity='$anonymity',country='$country',region='$region',city='$city',uptime='$uptime',create_time='$now';"
+    mysql -e "insert into $dbname.proxy set ipaddr='$ipaddr',port='$port',protocol='$protocol',anonymity='$anonymity',country='$country',region='$region',city='$city',uptime='$uptime';"
+
+    # mysql -e "insert into $dbname.proxy set ipaddr='$ipaddr',port='$port',protocol='$protocol',anonymity='$anonymity',country='$country',province='$region',city='$city',uptime='$uptime',createTime='$now';"
 
 done
 

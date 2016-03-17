@@ -1,7 +1,7 @@
 #!/bin/bash
 #lemp-馬雪東
 #https://lempstacker.com
-#2016.03.08 22:50 Tue
+#2016.03.17 19:16 Thu
 #通過職位頁面獲取工作描述和工作地址
 
 
@@ -13,23 +13,23 @@
 #update數據庫，where條件是id
 
 dbname='lagou'
-limit=20
+limit=100
 
-# 獲取代理 管道會fork一個shell子進程，變量不會保存
-tempfile=`mktemp -t tempXXXXX.txt`
-mysql -Bse "select ipaddr,port from $dbname.proxy order by rand() limit 1" > $tempfile
-while read i; do
-    arr=($i)
+#curl參數 retry重試次數 retryDelay時間間隔
+declare i retry=5
+declare i retryDelay=5
+# curl -s --retry $retry --retry-delay $retryDelay -x ipaddr:port
+
+#獲取代理IP
+function getProxyIP () {
+    arr=(`mysql -Bse "select ipaddr,port from $dbname.proxy order by rand() limit 1;"`)
     ipaddr=${arr[0]}
     port=${arr[1]}
-done < $tempfile
-rm -f $tempfile
+    echo $ipaddr:$port
+}
 
-# mysql -Bse "select ipaddr,port from $dbname.proxy order by rand() limit 1" | while read i; do
-#     arr=($i)
-#     export ipaddr=${arr[0]}
-#     export port=${arr[1]}
-# done
+#調用自定義函數getProxyIP
+curltool="curl -s --retry $retry --retry-delay $retryDelay -x "`getProxyIP`
 
 url='http://www.lagou.com/jobs/'
 
@@ -37,16 +37,11 @@ mysql -Bse "select id,positionId from $dbname.jobs where address is null limit $
     arr=($line)
     id=${arr[0]}
     positionId=${arr[1]}
-    # echo "id is $id, and pid is $positionId"
-    # echo $ipaddr' dfsdfs '$port
 
     #使用代理curl抓取頁面
     tempfile=`mktemp -t tempXXXXX.txt`
     # -s quiet靜默模式 --retry 重試次數 --retry-delay 間隔時間 -x 代理 -o保存路徑
-    curl -s --retry 5 --retry-delay 5 -x $ipaddr:$port -o $tempfile $url$positionId'.html'
-    #使用gzip，gunzip仍無法解決某些數據入庫亂碼問題
-    # curl -H "Accept-Encoding: gzip" -s --retry 5 --retry-delay 5 -x $ipaddr:$port $url$positionId'.html' | gunzip > $tempfile
-
+    $curltool -o $tempfile $url$positionId'.html'
 
     #使用sed地址定界獲取指定標籤內容
     duty_and_request=`sed -n '/<dd class="job_bt">/,/<\/dd>/ p' $tempfile | grep -Evi "job_bt|</dd>|职位描述" | grep -v '^$' | sed  -r 's@</?(p|strong|br|span|class|ul|li)[[:space:]]{0,}/?>@@g;s@(<br class="">|<span class="">|<p class="">|<ul class="">|&nbsp;)@@g;' | sed -r "s@'@@g"`
@@ -58,10 +53,3 @@ mysql -Bse "select id,positionId from $dbname.jobs where address is null limit $
     mysql -e "update $dbname.jobs set duty_and_request='$duty_and_request',address='$address' where id=$id;"
     rm -f $tempfile
 done
-
-# echo $RANDOM
-
-# while read a b;do
-#     echo "${a}..${b}"
-#
-# done << `echo "select id,positionId from $dbname.jobs where address is null limit 1;" | mysql`
