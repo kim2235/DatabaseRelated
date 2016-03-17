@@ -35,7 +35,6 @@ create table if not exists proxy (
     uptime varchar(10) comment '代理IP正常運行時間',
     createTime timestamp default current_timestamp comment '數據入庫時間 YYYY-MM-DD HH:MM:SS',
     updateTime timestamp null on update current_timestamp comment '數據更新時間 YYYY-MM-DD HH:MM:SS',
-    key indProxy_id_ipaddr (id,ipaddr,port),
     unique key indProxy_ipaddr_port (ipaddr,port)
 )engine=innodb default charset=utf8 collate=utf8_general_ci comment='代理IP列表';
 
@@ -57,8 +56,8 @@ create table if not exists province (
     abbr_roc char(30) comment '省份簡稱(正體)',
     createTime timestamp default current_timestamp comment '數據入庫時間 YYYY-MM-DD HH:MM:SS',
     updateTime timestamp null on update current_timestamp comment '數據更新時間 YYYY-MM-DD HH:MM:SS',
-    key indProvince_name_abbr (id,name,abbr),
-    key indProvince_roc_name_abbr (id,name_roc,abbr_roc),
+    key indProvince_name_abbr (name,abbr),
+    key indProvince_roc_name_abbr (name_roc,abbr_roc),
     unique key ind_code (code)
 )engine=innodb default charset=utf8 collate=utf8_general_ci comment='中國大陸省份列表';
 
@@ -79,8 +78,8 @@ create table if not exists city (
     abbr_roc char(30) comment '地級市簡稱(正體)',
     createTime timestamp default current_timestamp comment '數據入庫時間 YYYY-MM-DD HH:MM:SS',
     updateTime timestamp null on update current_timestamp comment '數據更新時間 YYYY-MM-DD HH:MM:SS',
-    key indCity_name_abbr (id,name(12),abbr),
-    key indCity_roc_name_abbr (id,name_roc(12),abbr_roc),
+    key indCity_name_abbr (name(12),abbr),
+    key indCity_roc_name_abbr (name_roc(12),abbr_roc),
     key incCity_fkey_province (provinceId),
     unique key indCity_code (code),
     constraint fkey_province_city foreign key (provinceId) references province(id) on update cascade
@@ -101,8 +100,8 @@ create table if not exists country (
     abbr_roc char(30) comment '縣級市簡稱(正體)',
     createTime timestamp default current_timestamp comment '數據入庫時間 YYYY-MM-DD HH:MM:SS',
     updateTime timestamp null on update current_timestamp comment '數據更新時間 YYYY-MM-DD HH:MM:SS',
-    key indCoun_name_abbr (id,name(12),abbr),
-    key indCoun_roc_name_abbr (id,name_roc(12),abbr_roc),
+    key indCoun_name_abbr (name(12),abbr),
+    key indCoun_roc_name_abbr (name_roc(12),abbr_roc),
     key indCoun_fkey_city (cityId),
     unique key indCoun_code (code),
     constraint fkey_city_coun foreign key (cityId) references city(id) on update cascade
@@ -121,8 +120,8 @@ create table if not exists town (
     abbr_roc char(30) comment '鄉鎮簡稱(正體)',
     createTime timestamp default current_timestamp comment '數據入庫時間 YYYY-MM-DD HH:MM:SS',
     updateTime timestamp null on update current_timestamp comment '數據更新時間 YYYY-MM-DD HH:MM:SS',
-    key indTown_name_abbr (id,name(12),abbr),
-    key indTown_roc_name_abbr (id,name_roc(12),abbr_roc),
+    key indTown_name_abbr (name(12),abbr),
+    key indTown_roc_name_abbr (name_roc(12),abbr_roc),
     key indTown_fkey_coun (countryId),
     unique key indTown_code (code),
     constraint fkey_coun_town foreign key (countryId) references country(id) on update cascade
@@ -138,7 +137,6 @@ create table if not exists urbanruralCode (
     name_roc char(60) not null comment '城鄉分類代碼名稱(正體)',
     createTime timestamp default current_timestamp comment '數據入庫時間 YYYY-MM-DD HH:MM:SS',
     updateTime timestamp null on update current_timestamp comment '數據更新時間 YYYY-MM-DD HH:MM:SS',
-    key indurc_name_abbr (id,code,name),
     unique key indurc_code (code)
 )engine=innodb default charset=utf8 collate=utf8_general_ci comment='中國大陸城鄉分類代碼表';
 
@@ -158,8 +156,8 @@ create table if not exists village (
     abbr_roc char(30) comment '村莊簡稱(正體)',
     createTime timestamp default current_timestamp comment '數據入庫時間 YYYY-MM-DD HH:MM:SS',
     updateTime timestamp null on update current_timestamp comment '數據更新時間 YYYY-MM-DD HH:MM:SS',
-    key indVillage_name_abbr (id,name(12),abbr),
-    key indVillage_roc_name_abbr (id,name_roc(12),abbr_roc),
+    key indVillage_name_abbr (name(12),abbr),
+    key indVillage_roc_name_abbr (name_roc(12),abbr_roc),
     key indVillage_urcode (urbanruralCode),
     key indVillage_fkey_town (townId),
     unique key indVillage_code (code),

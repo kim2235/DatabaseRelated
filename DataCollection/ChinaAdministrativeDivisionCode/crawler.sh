@@ -14,8 +14,9 @@ declare i retryDelay=5
 
 #獲取代理IP
 function getProxyIP () {
-    temp=`mysql -Bse "select ipaddr,port from $dbname.proxy order by rand() limit 1;"`
-    arr=($temp)
+    # temp=`mysql -Bse "select ipaddr,port from $dbname.proxy order by rand() limit 1;"`
+    # arr=($temp)
+    arr=(`mysql -Bse "select ipaddr,port from $dbname.proxy order by rand() limit 1;"`)
     ipaddr=${arr[0]}
     port=${arr[1]}
     echo $ipaddr:$port
